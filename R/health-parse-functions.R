@@ -35,6 +35,8 @@ get_paths <- function() {
 #'   usually contains a date, a time, and one or more key-value pairs).
 #' @examples
 #' dat_txt <- read_healthfiles("/Users/name/dat_dir")
+#' @importFrom magrittr %>%
+#' @importFrom magrittr %<>%
 #' @export
 #'
 read_healthfiles <- function(
@@ -115,16 +117,6 @@ get_timestamp <- function(dat_txt) {
   ret <- as.Date(lubridate::ymd_hm(paste(date_time[,1], date_time[, 2])))
   return(ret)
 }
-testthat::test_that("function works for input vector of lenght 1", {
-  testthat::expect_equal(length(get_timestamp("2018-08-24; 17:40;")), 1)
-  testthat::expect_equal(get_timestamp("2018-08-24; 17:40"), as.Date("2018-08-24 17:40:00"))
-  testthat::expect_equal(get_timestamp("2018-08-24; 17:40; some more stuff"), as.Date("2018-08-24 17:40:00"))
-})
-testthat::test_that("function works for vectorized inputs", {
-  testthat::expect_equal(length(get_timestamp(c("2018-08-24; 17:40;", "2018-08-24; 17:40;"))), 2)
-  testthat::expect_equal(get_timestamp(c("2018-08-24; 17:40;", "2018-09-25; 18:51;")),
-               c(as.Date("2018-08-24 17:40:00"), as.Date("2018-09-25 18:51:00")))
-})
 
 
 #' Transform text data (date, key-value pairs) into a long-format data frame.
@@ -144,6 +136,8 @@ testthat::test_that("function works for vectorized inputs", {
 #' "2001-11-12; 19:30; weight=93.1kg;",
 #' "2001-11-13; 10:00; what=zustand; dauer=5d, leicht kraenklich, husten, schnupfen (!), leichte temperatur (37.3)")
 #' get_data_long(dat)
+#' @importFrom magrittr %>%
+#' @importFrom magrittr %<>%
 #' @export
 #'
 get_data_long <- function(dat_txt, sep = ";") {
@@ -187,34 +181,7 @@ get_data_long <- function(dat_txt, sep = ";") {
   )
   return(dat_ret)
 }
-testthat::test_that("correct long data structure is returned", {
-  dat <- c("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; Anaesthesist=Dr. Vorname Nachname; Instrumentarin=DGKS Vorname Nachname, DGKP Vorname Nachname; what=some (long) text with semicolons; and other stuff / like slashes, commas, question ? marks, etc.;",
-  "2001-10-11; 19:40; weight=92.8kg;",
-  "2001-11-12; 19:30; weight=93.1kg;",
-  "2001-11-13; 10:00; what=zustand; dauer=5d, leicht kraenklich, husten, schnupfen (!), leichte temperatur (37.3)")
-  testthat::expect_equal(dim(get_data_long(dat)), c(9, 3))
-  testthat::expect_equal(as.vector(get_data_long(dat)[["key"]]),
-                         c("arzt", "Anaesthesist", "Instrumentarin", "what", NA,
-                           "weight", "weight", "what", "dauer"))
-  testthat::expect_equal(get_data_long(dat)["key"],
-                         tibble("key" = c("arzt", "Anaesthesist",
-                                          "Instrumentarin", "what", NA,
-                                          "weight", "weight", "what", "dauer")))
-  testthat::expect_equal(get_data_long(dat)["value"],
-                         tibble("value" = c("OA Dr. Vorname Nachname",
-                                            "Dr. Vorname Nachname",
-                                            "DGKS Vorname Nachname, DGKP Vorname Nachname",
-                                            "some (long) text with semicolons",
-                                            "and other stuff / like slashes, commas, question ? marks, etc.",
-                                            "92.8kg", "93.1kg", "zustand",
-                                            "5d, leicht kraenklich, husten, schnupfen (!), leichte temperatur (37.3)")))
-  testthat::expect_equal(get_data_long(dat)["datetime"],
-                         tibble("datetime" = as.Date(rep(c("2001-11-10 11:00:00",
-                                                           "2001-10-11 19:40:00",
-                                                           "2001-11-12 19:30:00",
-                                                           "2001-11-13 10:00:00"),
-                                                         times = c(5, 1, 1, 2)))))
-})
+
 
 
 #' Get character value for a specific key.
@@ -248,6 +215,7 @@ testthat::test_that("correct long data structure is returned", {
 #' get_value_text(dat, key = "event")
 #' get_value_text(dat, key = "note")
 #' get_value_text(dat, key = "nonexisiting")
+#' @importFrom magrittr %>%
 #' @export
 #'
 get_value_text <- function(dat_txt, key, sep = ";") {
@@ -275,32 +243,7 @@ get_value_text <- function(dat_txt, key, sep = ";") {
 
   return(value_txt)
 }
-testthat::test_that("key is found correctly", {
-  dat <- c("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; Anaesthesist=Dr. Vorname Nachname; Instrumentarin=DGKS Vorname Nachname, DGKP Vorname Nachname; what=some (long) text with semicolons; and other stuff / like slashes, commas, question ? marks, etc.;",
-  "2001-10-11; 19:40; caliper = (brust-li: 15/13/16, brust-re: 18/14/18, bauch-li: 28/23/25, bauch-re: 29/24/24, bein-li: 14/12/12, bein-re: 19/20/19);",
-  "2001-11-12; 19:30; weight=93.1kg; note = some note here;",
-  "2001-11-13; 08:00; event = Ende Urlaub",
-  "2001-11-15; 10:00; what=zustand; dauer=5d, leicht kraenklich, husten, schnupfen (!), leichte temperatur (37.3)")
-  testthat::expect_equal(get_value_text(dat, key = "weight"), c("", "", "93.1kg", "",""))
-  testthat::expect_equal(get_value_text(dat, key = "caliper"), c("", "(brust-li: 15/13/16, brust-re: 18/14/18, bauch-li: 28/23/25, bauch-re: 29/24/24, bein-li: 14/12/12, bein-re: 19/20/19)", "", "", ""))
-  testthat::expect_equal(get_value_text(dat, key = "event"), c("", "", "", "Ende Urlaub", ""))
-  testthat::expect_equal(get_value_text(dat, key = "note"), c("", "", "some note here", "", ""))
-})
-testthat::test_that("nonexisting key returns just empty strings", {
-  dat <- c("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; Anaesthesist=Dr. Vorname Nachname; Instrumentarin=DGKS Vorname Nachname, DGKP Vorname Nachname; what=some (long) text with semicolons; and other stuff / like slashes, commas, question ? marks, etc.;",
-  "2001-10-11; 19:40; caliper = (brust-li: 15/13/16, brust-re: 18/14/18, bauch-li: 28/23/25, bauch-re: 29/24/24, bein-li: 14/12/12, bein-re: 19/20/19);",
-  "2001-11-12; 19:30; weight=93.1kg; note = some note here;",
-  "2001-11-13; 08:00; event = Ende Urlaub",
-  "2001-11-15; 10:00; what=zustand; dauer=5d, leicht kraenklich, husten, schnupfen (!), leichte temperatur (37.3)")
-  testthat::expect_equal(get_value_text(dat, key = "nonexisting"), c("", "", "", "", ""))
-})
-testthat::test_that("delimiter argument works as expected", {
-  dat_delim <- c("2001-11-12 | 19:30 | weight=93.1kg | note = some note here",
-                 "2001-11-12; 19:30;  weight=93.1kg | note = some note here",
-                 "2001-11-13; 08:00; event = Ende Urlaub")
-  testthat::expect_equal(get_value_text(dat_delim, key = "weight", sep = "\\|"),
-               c("93.1kg", "", ""))
-})
+
 
 
 #' Get numeric value for a specific key
@@ -324,7 +267,8 @@ get_value_num <- function(dat_txt, key, sep = ";") {
   return(value_num)
 }
 #get_value_num(dat_txt, key = "weight")
-
+## [[to do]]
+## * unit tests starting from here for the remaining functions
 
 
 #' Extract (mean) values for sub-keys.
@@ -365,7 +309,7 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
   value_split <- purrr::map(value_split, stringr::str_trim)
 
   ## split into a list of matrices ["key, "value"]:
-  key_split <- purrr::map(value_split, ~str_split_fixed(.x, keyvalue_sep, n = 2))
+  key_split <- purrr::map(value_split, ~stringr::str_split_fixed(.x, keyvalue_sep, n = 2))
 
   ## extract the value for specified subkey:
   value_vec <- purrr::map(key_split, ~ .x[which(.x[,1] == subkey), 2])
