@@ -6,9 +6,38 @@
 \usage{
 get_value_num(dat_txt, key, sep = ";")
 }
+\arguments{
+\item{dat_txt}{Character vector that contains key-value pairs.}
+
+\item{key}{Character vector of length 1 that specifies the key to look for.
+It is assumed that the key is found at the beginning of a key-value
+pair (i.e., the key-text has to start with the text specified in the
+\code{key} parameter), as well as that it ends with and equals-sign "="
+(i.e., format of key-value pairs needs to be \code{"key = value"}).
+Can be a regular expression.}
+
+\item{sep}{Character vector of length 1 that specifies which separator
+is used to separate the key-value pairs from each other. Needs to be a
+valid regular expression, i.e., if "|" is used, the separator needs to be
+"\|". Default is ";".}
+}
+\value{
+A numeric vector with as many elements as input elements in
+\code{dat_txt}, returning the values of the specified key or \code{NA}
+if that key is not found or the character value of that key cannot be
+converted to a numeric data type.
+}
 \description{
 The function will only return the first value with
 that key for a specific date (i.e., multiple identical keys for the same
 timestamp will be ignored.). If key is not found, NA will be returned
 for that line of the data.
+}
+\examples{
+dat <- c("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; Anaesthesist=Dr. Vorname Nachname; Instrumentarin=DGKS Vorname Nachname, DGKP Vorname Nachname; what=some (long) text with semicolons; and other stuff / like slashes, commas, question ? marks, etc.;",
+"2001-10-11; 19:40; caliper = (brust-li: 15/13/16, brust-re: 18/14/18, bauch-li: 28/23/25, bauch-re: 29/24/24, bein-li: 14/12/12, bein-re: 19/20/19);",
+"2001-11-12; 19:30; weight=93.1kg; note = some note here;",
+"2001-11-13; 08:00; event = Ende Urlaub",
+"2001-11-15; 10:00; what=zustand; dauer=5d, leicht kraenklich, husten, schnupfen (!), leichte temperatur (37.3)")
+get_value_num(dat, key = "weight")
 }

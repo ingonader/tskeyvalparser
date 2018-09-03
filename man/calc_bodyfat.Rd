@@ -8,8 +8,19 @@ calc_bodyfat(value, age, key_sep = ",", keyvalue_sep = ":",
   vecsep = "/")
 }
 \arguments{
+\item{value}{The value extracted from the original key-value pair.}
+
 \item{age}{Age of the person that the caliper measurements were taken of
 (at the time of taking the measurements).}
+
+\item{key_sep}{The separator that separates the subkey-value-pairs
+from each other.}
+
+\item{keyvalue_sep}{The separator that separates the subkey from the value(s)
+of that subkey.}
+
+\item{vecsep}{The separator that separates the individual values for each
+subkey value.}
 }
 \description{
 Using the 3-Falten-Formel by Jackson & Pollock, for men.

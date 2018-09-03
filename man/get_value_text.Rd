@@ -21,6 +21,11 @@ is used to separate the key-value pairs from each other. Needs to be a
 valid regular expression, i.e., if "|" is used, the separator needs to be
 "\|". Default is ";".}
 }
+\value{
+A character vector with as many elements as input elements in
+\code{dat_txt}, returning the values of the specified key or an
+empty string if that key is not found.
+}
 \description{
 The function will only return the first value with
 that key for a specific date (i.e., multiple identical keys for the same

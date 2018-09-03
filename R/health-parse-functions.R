@@ -203,7 +203,10 @@ get_data_long <- function(dat_txt, sep = ";") {
 #'   valid regular expression, i.e., if "|" is used, the separator needs to be
 #'   "\\|". Default is ";".
 #'
-#' @return
+#' @return A character vector with as many elements as input elements in
+#'   \code{dat_txt}, returning the values of the specified key or an
+#'   empty string if that key is not found.
+#'
 #' @examples
 #' dat <- c("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; Anaesthesist=Dr. Vorname Nachname; Instrumentarin=DGKS Vorname Nachname, DGKP Vorname Nachname; what=some (long) text with semicolons; and other stuff / like slashes, commas, question ? marks, etc.;",
 #' "2001-10-11; 19:40; caliper = (brust-li: 15/13/16, brust-re: 18/14/18, bauch-li: 28/23/25, bauch-re: 29/24/24, bein-li: 14/12/12, bein-re: 19/20/19);",
@@ -253,12 +256,20 @@ get_value_text <- function(dat_txt, key, sep = ";") {
 #' timestamp will be ignored.). If key is not found, NA will be returned
 #' for that line of the data.
 #'
-#' @inheritParams get_value_txt
+#' @inheritParams get_value_text
 #'
-#' @return
+#' @return A numeric vector with as many elements as input elements in
+#'   \code{dat_txt}, returning the values of the specified key or \code{NA}
+#'   if that key is not found or the character value of that key cannot be
+#'   converted to a numeric data type.
 #' @examples
+#' dat <- c("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; Anaesthesist=Dr. Vorname Nachname; Instrumentarin=DGKS Vorname Nachname, DGKP Vorname Nachname; what=some (long) text with semicolons; and other stuff / like slashes, commas, question ? marks, etc.;",
+#' "2001-10-11; 19:40; caliper = (brust-li: 15/13/16, brust-re: 18/14/18, bauch-li: 28/23/25, bauch-re: 29/24/24, bein-li: 14/12/12, bein-re: 19/20/19);",
+#' "2001-11-12; 19:30; weight=93.1kg; note = some note here;",
+#' "2001-11-13; 08:00; event = Ende Urlaub",
+#' "2001-11-15; 10:00; what=zustand; dauer=5d, leicht kraenklich, husten, schnupfen (!), leichte temperatur (37.3)")
+#' get_value_num(dat, key = "weight")
 #' @export
-#'
 get_value_num <- function(dat_txt, key, sep = ";") {
   value_txt <- get_value_text(dat_txt, key, sep)
   ## remove all non-numeric characters at the end (probably units):
@@ -294,11 +305,11 @@ get_value_num <- function(dat_txt, key, sep = ";") {
 #' #value <- get_value_text(dat_txt, key = "caliper")
 #' #value <- value[357:360]
 #' #subkey <- "brust-li"
-#' dat_txt <- c("2018-03-23; 20:30; caliper = (brust-li: 14/12/11, brust-re: 12/13/13, bauch-li: 25/25/25, bauch-re: 26/26/25, bein-li: 15/15/15, bein-re: 24/23/26);",
+#' dat <- c("2018-03-23; 20:30; caliper = (brust-li: 14/12/11, brust-re: 12/13/13, bauch-li: 25/25/25, bauch-re: 26/26/25, bein-li: 15/15/15, bein-re: 24/23/26);",
 #'   "2018-03-29; 19:00; weight = 90.1kg;", "2018-03-30; 21:00; weight = 89.3kg; note = nach Laufen;",
 #'   "2018-03-30; 21:00; caliper = (brust-li: 12/13/12, brust-re: 12/13/13, bauch-li: 28/29/29, bauch-re: 24/21/28, bein-li: 14/16/14, bein-re: 22/22/21);")
 #' get_subkey_value_mean(
-#'   get_value_text(dat_txt, key = "caliper"),
+#'   get_value_text(dat, key = "caliper"),
 #'   subkey = "brust-re")
 get_subkey_value_mean <- function(value, subkey, key_sep = ",",
                                   keyvalue_sep = ":", vecsep = "/") {
@@ -319,7 +330,8 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
   ret <- purrr::map_dbl(value_vec_split, ~ suppressWarnings(mean(as.numeric(.x))))
   return(ret)
 }
-
+## [[to do]]
+## * get rid of warnings!
 
 
 #' Calculate body fat from caliper measurements.
@@ -328,7 +340,7 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
 #'
 #' @param age Age of the person that the caliper measurements were taken of
 #'   (at the time of taking the measurements).
-#' @inheritParams get_subkey_value_mean value key_sep keyvalue_sep vecsep
+#' @inheritParams get_subkey_value_mean
 #'
 #' @references
 #' \url{https://de.wikipedia.org/wiki/Calipometrie}
@@ -362,5 +374,12 @@ calc_bodyfat <- function(value, age, key_sep = ",",
 
   ## [[?]] also return a value if there is only one measurement (li or re)?
 }
+## [[to do]]
+## * get rid of warnings!
+## * add documentation
+#dat <- c("2018-03-23; 20:30; caliper = (brust-li: 14/12/11, brust-re: 12/13/13, bauch-li: 25/25/25, bauch-re: 26/26/25, bein-li: 15/15/15, bein-re: 24/23/26);",
+#             "2018-03-29; 19:00; weight = 90.1kg;", "2018-03-30; 21:00; weight = 89.3kg; note = nach Laufen;",
+#             "2018-03-30; 21:00; caliper = (brust-li: 12/13/12, brust-re: 12/13/13, bauch-li: 28/29/29, bauch-re: 24/21/28, bein-li: 14/16/14, bein-re: 22/22/21);")
+#calc_bodyfat(get_value_text(dat, key = "caliper"), age = 39)
 
 
