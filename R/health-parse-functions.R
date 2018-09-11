@@ -106,6 +106,7 @@ remove_comments <- function(dat_txt) {
 #' get_timestamp(dat_txt[1:2])
 #' get_timestamp(dat_txt)
 #' get_timestamp(remove_comments(dat_txt))
+#' get_timestamp(dat_txt[409:414])
 #' }
 #' @export
 get_timestamp <- function(dat_txt) {
@@ -117,7 +118,6 @@ get_timestamp <- function(dat_txt) {
   ret <- as.Date(lubridate::ymd_hm(paste(date_time[,1], date_time[, 2])))
   return(ret)
 }
-## [[here]] check out warnings: how to get rid of them? [[to do]] (see help example)
 
 
 #' Transform text data (date, key-value pairs) into a long-format data frame.
