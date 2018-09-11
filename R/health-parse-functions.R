@@ -356,16 +356,16 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
   ## split into a list of matrices ["key, "value"]:
   key_split <- purrr::map(value_split, ~stringr::str_split_fixed(.x, keyvalue_sep, n = 2))
 
-  ## extract the value for specified subkey:
+  ## extract the value for specified subkey, replacing "character(0)" with NA:
   value_vec <- purrr::map(key_split, ~ .x[which(.x[,1] == subkey), 2])
+  value_vec <- purrr::map(value_vec, ~ ifelse(length(.x) == 0, NA, .x))
 
   ## split into individual values, convert to numeric and calulate mean:
   value_vec_split <- stringr::str_split(value_vec, vecsep)
-  ret <- purrr::map_dbl(value_vec_split, ~ suppressWarnings(mean(as.numeric(.x))))
+  value_vec_split <- purrr::map(value_vec_split, ~ ifelse(.x == "NA", NA, .x))
+  ret <- purrr::map_dbl(value_vec_split, ~ (mean(as.numeric(.x))))
   return(ret)
 }
-## [[to do]]
-## * get rid of warnings!
 
 
 #' Calculate body fat from caliper measurements.

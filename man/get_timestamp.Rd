@@ -22,5 +22,6 @@ get_timestamp("2018-08-24; 17:40;")
 get_timestamp(dat_txt[1:2])
 get_timestamp(dat_txt)
 get_timestamp(remove_comments(dat_txt))
+get_timestamp(dat_txt[409:414])
 }
 }
