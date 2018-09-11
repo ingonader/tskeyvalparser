@@ -34,9 +34,15 @@ and extracts the mean value for a specified subkey.
 #value <- get_value_text(dat_txt, key = "caliper")
 #value <- value[357:360]
 #subkey <- "brust-li"
-dat <- c("2018-03-23; 20:30; caliper = (brust-li: 14/12/11, brust-re: 12/13/13, bauch-li: 25/25/25, bauch-re: 26/26/25, bein-li: 15/15/15, bein-re: 24/23/26);",
-  "2018-03-29; 19:00; weight = 90.1kg;", "2018-03-30; 21:00; weight = 89.3kg; note = nach Laufen;",
-  "2018-03-30; 21:00; caliper = (brust-li: 12/13/12, brust-re: 12/13/13, bauch-li: 28/29/29, bauch-re: 24/21/28, bein-li: 14/16/14, bein-re: 22/22/21);")
+dat <- c(paste0("2018-03-23; 20:30; caliper = (brust-li: 14/12/11, ",
+                "brust-re: 12/13/13, bauch-li: 25/25/25, ",
+                "bauch-re: 26/26/25, bein-li: 15/15/15, ",
+                "bein-re: 24/23/26);"),
+         paste0("2018-03-29; 19:00; weight = 90.1kg;", "2018-03-30; 21:00; ",
+                "weight = 89.3kg; note = nach Laufen;"),
+         paste0("2018-03-30; 21:00; caliper = (brust-li: 12/13/12, ",
+                "brust-re: 12/13/13, bauch-li: 28/29/29, bauch-re: 24/21/28, ",
+                "bein-li: 14/16/14, bein-re: 22/22/21);"))
 get_subkey_value_mean(
   get_value_text(dat, key = "caliper"),
   subkey = "brust-re")

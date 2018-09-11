@@ -23,9 +23,16 @@ still necessary.
 Transform text data (date, key-value pairs) into a long-format data frame.
 }
 \examples{
-dat <- c("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; Anaesthesist=Dr. Vorname Nachname; Instrumentarin=DGKS Vorname Nachname, DGKP Vorname Nachname; what=some (long) text with semicolons; and other stuff / like slashes, commas, question ? marks, etc.;",
-"2001-10-11; 19:40; weight=92.8kg;",
-"2001-11-12; 19:30; weight=93.1kg;",
-"2001-11-13; 10:00; what=zustand; dauer=5d, leicht kraenklich, husten, schnupfen (!), leichte temperatur (37.3)")
+dat <- c(paste0("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; ",
+                "Anaesthesist=Dr. Vorname Nachname; ",
+                "Instrumentarin=DGKS Vorname Nachname, ",
+                "DGKP Vorname Nachname; what=some (long) text with ",
+                "semicolons; and other stuff / like slashes, commas, ",
+                 "question ? marks, etc.;"),
+         "2001-10-11; 19:40; weight=92.8kg;",
+         "2001-11-12; 19:30; weight=93.1kg;",
+         paste0("2001-11-13; 10:00; what=zustand; dauer=5d, ",
+                "leicht kraenklich, husten, schnupfen (!), ",
+                 "leichte temperatur (37.3)"))
 get_data_long(dat)
 }

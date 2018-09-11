@@ -21,6 +21,6 @@ get_timestamp("2018-08-24; 17:40;")
 \dontrun{
 get_timestamp(dat_txt[1:2])
 get_timestamp(dat_txt)
-get_timestamp(remove_comments(dat_txt)) ## [[here]] check out warnings: how to get rid of them? [[to do]]
+get_timestamp(remove_comments(dat_txt))
 }
 }

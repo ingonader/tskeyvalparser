@@ -105,7 +105,7 @@ remove_comments <- function(dat_txt) {
 #' \dontrun{
 #' get_timestamp(dat_txt[1:2])
 #' get_timestamp(dat_txt)
-#' get_timestamp(remove_comments(dat_txt)) ## [[here]] check out warnings: how to get rid of them? [[to do]]
+#' get_timestamp(remove_comments(dat_txt))
 #' }
 #' @export
 get_timestamp <- function(dat_txt) {
@@ -117,6 +117,7 @@ get_timestamp <- function(dat_txt) {
   ret <- as.Date(lubridate::ymd_hm(paste(date_time[,1], date_time[, 2])))
   return(ret)
 }
+## [[here]] check out warnings: how to get rid of them? [[to do]] (see help example)
 
 
 #' Transform text data (date, key-value pairs) into a long-format data frame.
@@ -131,10 +132,17 @@ get_timestamp <- function(dat_txt) {
 #'   as numerical data, filtering all non-numeric data and conversion are
 #'   still necessary.
 #' @examples
-#' dat <- c("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; Anaesthesist=Dr. Vorname Nachname; Instrumentarin=DGKS Vorname Nachname, DGKP Vorname Nachname; what=some (long) text with semicolons; and other stuff / like slashes, commas, question ? marks, etc.;",
-#' "2001-10-11; 19:40; weight=92.8kg;",
-#' "2001-11-12; 19:30; weight=93.1kg;",
-#' "2001-11-13; 10:00; what=zustand; dauer=5d, leicht kraenklich, husten, schnupfen (!), leichte temperatur (37.3)")
+#' dat <- c(paste0("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; ",
+#'                 "Anaesthesist=Dr. Vorname Nachname; ",
+#'                 "Instrumentarin=DGKS Vorname Nachname, ",
+#'                 "DGKP Vorname Nachname; what=some (long) text with ",
+#'                 "semicolons; and other stuff / like slashes, commas, ",
+#'                  "question ? marks, etc.;"),
+#'          "2001-10-11; 19:40; weight=92.8kg;",
+#'          "2001-11-12; 19:30; weight=93.1kg;",
+#'          paste0("2001-11-13; 10:00; what=zustand; dauer=5d, ",
+#'                 "leicht kraenklich, husten, schnupfen (!), ",
+#'                  "leichte temperatur (37.3)"))
 #' get_data_long(dat)
 #' @importFrom magrittr %>%
 #' @importFrom magrittr %<>%
@@ -208,11 +216,21 @@ get_data_long <- function(dat_txt, sep = ";") {
 #'   empty string if that key is not found.
 #'
 #' @examples
-#' dat <- c("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; Anaesthesist=Dr. Vorname Nachname; Instrumentarin=DGKS Vorname Nachname, DGKP Vorname Nachname; what=some (long) text with semicolons; and other stuff / like slashes, commas, question ? marks, etc.;",
-#' "2001-10-11; 19:40; caliper = (brust-li: 15/13/16, brust-re: 18/14/18, bauch-li: 28/23/25, bauch-re: 29/24/24, bein-li: 14/12/12, bein-re: 19/20/19);",
-#' "2001-11-12; 19:30; weight=93.1kg; note = some note here;",
-#' "2001-11-13; 08:00; event = Ende Urlaub",
-#' "2001-11-15; 10:00; what=zustand; dauer=5d, leicht kraenklich, husten, schnupfen (!), leichte temperatur (37.3)")
+#' dat <- c(paste0("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; ",
+#'                 "Anaesthesist=Dr. Vorname Nachname; ",
+#'                 "Instrumentarin=DGKS Vorname Nachname, ",
+#'                 "DGKP Vorname Nachname; what=some (long) text with ",
+#'                 "semicolons; and other stuff / like slashes, commas, ",
+#'                 "question ? marks, etc.;"),
+#'          paste0("2001-10-11; 19:40; caliper = (brust-li: 15/13/16, ",
+#'                 "brust-re: 18/14/18, bauch-li: 28/23/25, ",
+#'                 "bauch-re: 29/24/24, ",
+#'                 "bein-li: 14/12/12, bein-re: 19/20/19);"),
+#'          "2001-11-12; 19:30; weight=93.1kg; note = some note here;",
+#'          "2001-11-13; 08:00; event = Ende Urlaub",
+#'          paste0("2001-11-13; 10:00; what=zustand; dauer=5d, ",
+#'                 "leicht kraenklich, husten, schnupfen (!), ",
+#'                 "leichte temperatur (37.3)"))
 #' get_value_text(dat, key = "caliper")
 #' get_value_text(dat, key = "weight")
 #' get_value_text(dat, key = "event")
@@ -263,11 +281,21 @@ get_value_text <- function(dat_txt, key, sep = ";") {
 #'   if that key is not found or the character value of that key cannot be
 #'   converted to a numeric data type.
 #' @examples
-#' dat <- c("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; Anaesthesist=Dr. Vorname Nachname; Instrumentarin=DGKS Vorname Nachname, DGKP Vorname Nachname; what=some (long) text with semicolons; and other stuff / like slashes, commas, question ? marks, etc.;",
-#' "2001-10-11; 19:40; caliper = (brust-li: 15/13/16, brust-re: 18/14/18, bauch-li: 28/23/25, bauch-re: 29/24/24, bein-li: 14/12/12, bein-re: 19/20/19);",
-#' "2001-11-12; 19:30; weight=93.1kg; note = some note here;",
-#' "2001-11-13; 08:00; event = Ende Urlaub",
-#' "2001-11-15; 10:00; what=zustand; dauer=5d, leicht kraenklich, husten, schnupfen (!), leichte temperatur (37.3)")
+#' dat <- c(paste0("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; ",
+#'                 "Anaesthesist=Dr. Vorname Nachname; ",
+#'                 "Instrumentarin=DGKS Vorname Nachname, ",
+#'                 "DGKP Vorname Nachname; what=some (long) text with ",
+#'                 "semicolons; and other stuff / like slashes, commas, ",
+#'                 "question ? marks, etc.;"),
+#'          paste0("2001-10-11; 19:40; caliper = (brust-li: 15/13/16, ",
+#'                 "brust-re: 18/14/18, bauch-li: 28/23/25, ",
+#'                 "bauch-re: 29/24/24, ",
+#'                 "bein-li: 14/12/12, bein-re: 19/20/19);"),
+#'          "2001-11-12; 19:30; weight=93.1kg; note = some note here;",
+#'          "2001-11-13; 08:00; event = Ende Urlaub",
+#'          paste0("2001-11-13; 10:00; what=zustand; dauer=5d, ",
+#'                 "leicht kraenklich, husten, schnupfen (!), ",
+#'                 "leichte temperatur (37.3)"))
 #' get_value_num(dat, key = "weight")
 #' @export
 get_value_num <- function(dat_txt, key, sep = ";") {
@@ -305,9 +333,15 @@ get_value_num <- function(dat_txt, key, sep = ";") {
 #' #value <- get_value_text(dat_txt, key = "caliper")
 #' #value <- value[357:360]
 #' #subkey <- "brust-li"
-#' dat <- c("2018-03-23; 20:30; caliper = (brust-li: 14/12/11, brust-re: 12/13/13, bauch-li: 25/25/25, bauch-re: 26/26/25, bein-li: 15/15/15, bein-re: 24/23/26);",
-#'   "2018-03-29; 19:00; weight = 90.1kg;", "2018-03-30; 21:00; weight = 89.3kg; note = nach Laufen;",
-#'   "2018-03-30; 21:00; caliper = (brust-li: 12/13/12, brust-re: 12/13/13, bauch-li: 28/29/29, bauch-re: 24/21/28, bein-li: 14/16/14, bein-re: 22/22/21);")
+#' dat <- c(paste0("2018-03-23; 20:30; caliper = (brust-li: 14/12/11, ",
+#'                 "brust-re: 12/13/13, bauch-li: 25/25/25, ",
+#'                 "bauch-re: 26/26/25, bein-li: 15/15/15, ",
+#'                 "bein-re: 24/23/26);"),
+#'          paste0("2018-03-29; 19:00; weight = 90.1kg;", "2018-03-30; 21:00; ",
+#'                 "weight = 89.3kg; note = nach Laufen;"),
+#'          paste0("2018-03-30; 21:00; caliper = (brust-li: 12/13/12, ",
+#'                 "brust-re: 12/13/13, bauch-li: 28/29/29, bauch-re: 24/21/28, ",
+#'                 "bein-li: 14/16/14, bein-re: 22/22/21);"))
 #' get_subkey_value_mean(
 #'   get_value_text(dat, key = "caliper"),
 #'   subkey = "brust-re")

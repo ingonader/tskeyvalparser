@@ -34,10 +34,20 @@ timestamp will be ignored.). If key is not found, NA will be returned
 for that line of the data.
 }
 \examples{
-dat <- c("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; Anaesthesist=Dr. Vorname Nachname; Instrumentarin=DGKS Vorname Nachname, DGKP Vorname Nachname; what=some (long) text with semicolons; and other stuff / like slashes, commas, question ? marks, etc.;",
-"2001-10-11; 19:40; caliper = (brust-li: 15/13/16, brust-re: 18/14/18, bauch-li: 28/23/25, bauch-re: 29/24/24, bein-li: 14/12/12, bein-re: 19/20/19);",
-"2001-11-12; 19:30; weight=93.1kg; note = some note here;",
-"2001-11-13; 08:00; event = Ende Urlaub",
-"2001-11-15; 10:00; what=zustand; dauer=5d, leicht kraenklich, husten, schnupfen (!), leichte temperatur (37.3)")
+dat <- c(paste0("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; ",
+                "Anaesthesist=Dr. Vorname Nachname; ",
+                "Instrumentarin=DGKS Vorname Nachname, ",
+                "DGKP Vorname Nachname; what=some (long) text with ",
+                "semicolons; and other stuff / like slashes, commas, ",
+                "question ? marks, etc.;"),
+         paste0("2001-10-11; 19:40; caliper = (brust-li: 15/13/16, ",
+                "brust-re: 18/14/18, bauch-li: 28/23/25, ",
+                "bauch-re: 29/24/24, ",
+                "bein-li: 14/12/12, bein-re: 19/20/19);"),
+         "2001-11-12; 19:30; weight=93.1kg; note = some note here;",
+         "2001-11-13; 08:00; event = Ende Urlaub",
+         paste0("2001-11-13; 10:00; what=zustand; dauer=5d, ",
+                "leicht kraenklich, husten, schnupfen (!), ",
+                "leichte temperatur (37.3)"))
 get_value_num(dat, key = "weight")
 }
