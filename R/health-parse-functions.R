@@ -305,9 +305,6 @@ get_value_num <- function(dat_txt, key, sep = ";") {
   value_num <- suppressWarnings(as.numeric(value_txt))
   return(value_num)
 }
-#get_value_num(dat_txt, key = "weight")
-## [[to do]]
-## * unit tests starting from here for the remaining functions
 
 
 
@@ -367,6 +364,8 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
   ret <- purrr::map_dbl(value_vec_split, ~ (mean(as.numeric(.x))))
   return(ret)
 }
+## [[to do]]
+## * unit tests starting from here for the remaining functions
 
 
 #' Calculate body fat from caliper measurements.

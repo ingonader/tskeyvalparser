@@ -42,20 +42,20 @@ dat_delim <- c("2001-11-12 | 19:30 | weight=93.1kg | note = some note here",
 ## get_timestamp() ####
 ## ========================================================================= ##
 
-testthat::test_that("get_timestamp() works for input vector of lenght 1", {
-  testthat::expect_equal(length(get_timestamp("2018-08-24; 17:40;")),
+test_that("get_timestamp() works for input vector of lenght 1", {
+  expect_equal(length(get_timestamp("2018-08-24; 17:40;")),
                          1)
-  testthat::expect_equal(get_timestamp("2018-08-24; 17:40"),
+  expect_equal(get_timestamp("2018-08-24; 17:40"),
                          as.Date("2018-08-24 17:40:00"))
-  testthat::expect_equal(get_timestamp("2018-08-24; 17:40; some more stuff"),
+  expect_equal(get_timestamp("2018-08-24; 17:40; some more stuff"),
                          as.Date("2018-08-24 17:40:00"))
 })
 
-testthat::test_that("get_timestamp function works for vectorized inputs", {
-  testthat::expect_equal(
+test_that("get_timestamp function works for vectorized inputs", {
+  expect_equal(
     length(get_timestamp(c("2018-08-24; 17:40;", "2018-08-24; 17:40;"))),
     2)
-  testthat::expect_equal(
+  expect_equal(
     get_timestamp(c("2018-08-24; 17:40;", "2018-09-25; 18:51;")),
     c(as.Date("2018-08-24 17:40:00"), as.Date("2018-09-25 18:51:00")))
 })
@@ -66,18 +66,18 @@ testthat::test_that("get_timestamp function works for vectorized inputs", {
 ## ========================================================================= ##
 
 
-testthat::test_that("get_data_long() returns correct long data structure", {
-  testthat::expect_equal(dim(get_data_long(dat_01)), c(11, 3))
-  testthat::expect_equal(as.vector(get_data_long(dat_01)[["key"]]),
+test_that("get_data_long() returns correct long data structure", {
+  expect_equal(dim(get_data_long(dat_01)), c(11, 3))
+  expect_equal(as.vector(get_data_long(dat_01)[["key"]]),
                          c("arzt", "Anaesthesist", "Instrumentarin", "what", NA,
                            "weight", "weight", "weight", "weight",
                            "what", "dauer"))
-  testthat::expect_equal(get_data_long(dat_01)["key"],
+  expect_equal(get_data_long(dat_01)["key"],
                          tibble::tibble("key" = c("arzt", "Anaesthesist",
                                           "Instrumentarin", "what", NA,
                                           "weight", "weight", "weight",
                                           "weight", "what", "dauer")))
-  testthat::expect_equal(
+  expect_equal(
     get_data_long(dat_01)["value"],
     tibble::tibble("value" = c(
       "OA Dr. Vorname Nachname",
@@ -88,7 +88,7 @@ testthat::test_that("get_data_long() returns correct long data structure", {
       "92.8kg", "93.1kg", "93.1", "93.1", "zustand",
       paste0("5d, leicht kraenklich, husten, schnupfen (!), ",
              "leichte temperatur (37.3)"))))
-  testthat::expect_equal(get_data_long(dat_01)["datetime"],
+  expect_equal(get_data_long(dat_01)["datetime"],
                          tibble::tibble(
                            "datetime" = as.Date(
                              rep(c("2001-11-10 11:00:00",
@@ -104,42 +104,44 @@ testthat::test_that("get_data_long() returns correct long data structure", {
 ## get_value_text()
 ## ========================================================================= ##
 
-testthat::test_that("get_value_text() finds key correctly", {
-  testthat::expect_equal(get_value_text(dat_02, key = "weight"),
+test_that("get_value_text() finds key correctly", {
+  expect_equal(get_value_text(dat_02, key = "weight"),
                          c("", "", "93.1kg", "",""))
-  testthat::expect_equal(get_value_text(dat_02, key = "caliper"),
+  expect_equal(get_value_text(dat_02, key = "caliper"),
                          c("", "(brust-li: 15/13/16, brust-re: 18/14/18, bauch-li: 28/23/25, bauch-re: 29/24/24, bein-li: 14/12/12, bein-re: 19/20/19)", "", "", ""))
-  testthat::expect_equal(get_value_text(dat_02, key = "event"),
+  expect_equal(get_value_text(dat_02, key = "event"),
                          c("", "", "", "Ende Urlaub", ""))
-  testthat::expect_equal(get_value_text(dat_02, key = "note"),
+  expect_equal(get_value_text(dat_02, key = "note"),
                          c("", "", "some note here", "", ""))
 })
 
-testthat::test_that("get_value_text() returns empty strings for nonexisting key", {
-  testthat::expect_equal(get_value_text(dat_02, key = "nonexisting"),
+test_that("get_value_text() returns empty strings for nonexisting key", {
+  expect_equal(get_value_text(dat_02, key = "nonexisting"),
                          c("", "", "", "", ""))
 })
 
-testthat::test_that("function get_value_text delimiter argument works as expected", {
-  testthat::expect_equal(get_value_text(dat_delim, key = "weight", sep = "\\|"),
+test_that("function get_value_text delimiter argument works as expected", {
+  expect_equal(get_value_text(dat_delim, key = "weight", sep = "\\|"),
                          c("93.1kg", "", ""))
 })
 
 
 ## ========================================================================= ##
-## get_value_text()
+## get_value_num() ####
 ## ========================================================================= ##
 
-## [[to do]]
-
-testthat::test_that("get_value_num() returns numeric value correctly", {
-  testthat::expect_equal(get_value_num(dat_01, key = "weight"),
+test_that("get_value_num() returns numeric value correctly", {
+  expect_equal(get_value_num(dat_01, key = "weight"),
                          c(NA, 92.8, 93.1, 93.1, 93.1, NA))
 })
 
-testthat::test_that("get_value_num() returns NA (type double) for nonexisting key", {
-  testthat::expect_equal(get_value_num(dat_02, key = "nonexisting"),
+test_that("get_value_num() returns NA (type double) for nonexisting key", {
+  expect_equal(get_value_num(dat_02, key = "nonexisting"),
                          c(rep(as.double(NA), 5)))
 })
 
-## testthat::test_that("function get_value_text delimiter argument works as expected", {
+## test_that("function get_value_text delimiter argument works as expected", {
+
+## ========================================================================= ##
+##
+## ========================================================================= ##
