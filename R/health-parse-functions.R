@@ -310,6 +310,7 @@ get_value_num <- function(dat_txt, key, sep = ";") {
 ## * unit tests starting from here for the remaining functions
 
 
+
 #' Extract (mean) values for sub-keys.
 #'
 #' Takes the (vector of) values that contain subkey-value-pairs

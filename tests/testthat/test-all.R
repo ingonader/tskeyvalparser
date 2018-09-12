@@ -118,3 +118,18 @@ testthat::test_that("function get_value_text delimiter argument works as expecte
   testthat::expect_equal(get_value_text(dat_delim, key = "weight", sep = "\\|"),
                          c("93.1kg", "", ""))
 })
+
+
+## ========================================================================= ##
+## get_value_text()
+## ========================================================================= ##
+
+## [[to do]]
+## testthat::test_that("get_value_text() finds key correctly", {
+
+testthat::test_that("get_value_num() returns NA (type double) for nonexisting key", {
+  testthat::expect_equal(get_value_num(dat_02, key = "nonexisting"),
+                         c(rep(as.double(NA), 5)))
+})
+
+## testthat::test_that("function get_value_text delimiter argument works as expected", {
