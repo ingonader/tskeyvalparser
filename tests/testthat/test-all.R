@@ -12,6 +12,8 @@ dat_01 <- c(paste0("2001-11-10; 11:00; arzt=OA Dr. Vorname Nachname; ",
                 "question ? marks, etc.;"),
             "2001-10-11; 19:40; weight=92.8kg;",
             "2001-11-12; 19:30; weight=93.1kg;",
+            "2001-11-12; 19:31; weight=93.1;",
+            "2001-11-12; 19:32; weight=93.1",
             paste0("2001-11-13; 10:00; what=zustand; dauer=5d, ",
                    "leicht kraenklich, husten, schnupfen (!), ",
                    "leichte temperatur (37.3)"))
@@ -65,14 +67,16 @@ testthat::test_that("get_timestamp function works for vectorized inputs", {
 
 
 testthat::test_that("get_data_long() returns correct long data structure", {
-  testthat::expect_equal(dim(get_data_long(dat_01)), c(9, 3))
+  testthat::expect_equal(dim(get_data_long(dat_01)), c(11, 3))
   testthat::expect_equal(as.vector(get_data_long(dat_01)[["key"]]),
                          c("arzt", "Anaesthesist", "Instrumentarin", "what", NA,
-                           "weight", "weight", "what", "dauer"))
+                           "weight", "weight", "weight", "weight",
+                           "what", "dauer"))
   testthat::expect_equal(get_data_long(dat_01)["key"],
                          tibble::tibble("key" = c("arzt", "Anaesthesist",
                                           "Instrumentarin", "what", NA,
-                                          "weight", "weight", "what", "dauer")))
+                                          "weight", "weight", "weight",
+                                          "weight", "what", "dauer")))
   testthat::expect_equal(
     get_data_long(dat_01)["value"],
     tibble::tibble("value" = c(
@@ -81,7 +85,7 @@ testthat::test_that("get_data_long() returns correct long data structure", {
       "DGKS Vorname Nachname, DGKP Vorname Nachname",
       "some (long) text with semicolons",
       "and other stuff / like slashes, commas, question ? marks, etc.",
-      "92.8kg", "93.1kg", "zustand",
+      "92.8kg", "93.1kg", "93.1", "93.1", "zustand",
       paste0("5d, leicht kraenklich, husten, schnupfen (!), ",
              "leichte temperatur (37.3)"))))
   testthat::expect_equal(get_data_long(dat_01)["datetime"],
@@ -90,8 +94,10 @@ testthat::test_that("get_data_long() returns correct long data structure", {
                              rep(c("2001-11-10 11:00:00",
                                    "2001-10-11 19:40:00",
                                    "2001-11-12 19:30:00",
+                                   "2001-11-12 19:31:00",
+                                   "2001-11-12 19:32:00",
                                    "2001-11-13 10:00:00"),
-                                 times = c(5, 1, 1, 2)))))
+                                 times = c(5, 1, 1, 1, 1, 2)))))
 })
 
 ## ========================================================================= ##
