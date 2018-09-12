@@ -149,4 +149,34 @@ test_that("get_value_num delimiter argument works as expected", {
 ## get_subkey_value_mean()
 ## ========================================================================= ##
 
+## dat02:
+# paste0("2001-10-11; 19:40; caliper = (brust-li: 15/13/16, ",
+#        "brust-re: 18/14/18, bauch-li: 28/23/25, ",
+#        "bauch-re: 29/24/24, ",
+#        "bein-li: 14/12/12, bein-re: 19/20/19);"),
+
+test_that("get_subkey_value_mean() returns mean correctly", {
+  expect_equal(get_subkey_value_mean(get_value_text(dat_02, key = "caliper"),
+                                     subkey = "brust-li"),
+               c(NA, mean(c(15,13,16)), NA, NA, NA))
+  expect_equal(get_subkey_value_mean(get_value_text(dat_02, key = "caliper"),
+                                     subkey = "brust-re"),
+               c(NA, mean(c(18,14,18)), NA, NA, NA))
+  expect_equal(get_subkey_value_mean(get_value_text(dat_02, key = "caliper"),
+                                     subkey = "bauch-li"),
+               c(NA, mean(c(28, 23, 25)), NA, NA, NA))
+  expect_equal(get_subkey_value_mean(get_value_text(dat_02, key = "caliper"),
+                                     subkey = "bauch-re"),
+               c(NA, mean(c(29, 24, 24)), NA, NA, NA))
+  expect_equal(get_subkey_value_mean(get_value_text(dat_02, key = "caliper"),
+                                     subkey = "bein-li"),
+               c(NA, mean(c(14, 12, 12)), NA, NA, NA))
+  expect_equal(get_subkey_value_mean(get_value_text(dat_02, key = "caliper"),
+                                     subkey = "bein-re"),
+               c(NA, mean(c(19, 20, 19)), NA, NA, NA))
+
+})
+
+
+
 ## [[here]] [[to do]]
