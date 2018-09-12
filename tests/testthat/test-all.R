@@ -140,8 +140,13 @@ test_that("get_value_num() returns NA (type double) for nonexisting key", {
                          c(rep(as.double(NA), 5)))
 })
 
-## test_that("function get_value_text delimiter argument works as expected", {
+test_that("get_value_num delimiter argument works as expected", {
+  expect_equal(get_value_num(dat_delim, key = "weight", sep = "\\|"),
+               c(93.1, NA, NA))
+})
 
 ## ========================================================================= ##
-##
+## get_subkey_value_mean()
 ## ========================================================================= ##
+
+## [[here]] [[to do]]
