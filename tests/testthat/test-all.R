@@ -177,6 +177,53 @@ test_that("get_subkey_value_mean() returns mean correctly", {
 
 })
 
+dat_delim_calip_01 <- c(paste0("2018-03-23; 20:30; caliper = (brust-li: 14/12/11, ",
+                            "brust-re: 12/13/13, bauch-li: 25/25/25, ",
+                            "bauch-re: 26/26/25, bein-li: 15/15/15, ",
+                            "bein-re: 24/23/26);"),
+                     paste0("2018-03-30 / 21:00 / ",
+                            "weight = 89.3kg / note = nach Laufen;"),
+                     paste0("2018-03-30; 21:00; caliper = (brust-li @ 12/13/12, ",
+                            "brust-re @ 12/13/13, bauch-li @ 28/29/29, bauch-re @ 24/21/28, ",
+                            "bein-li @ 14/16/14, bein-re @ 22/22/21);"),
+                     paste0("2018-03-30; 21:00; caliper = (brust-li @ 12/13/12 ! ",
+                            "brust-re @ 12/13/13 ! bauch-li @ 28/29/29 ! bauch-re @ 24/21/28 ! ",
+                            "bein-li @ 14/16/14 ! bein-re @ 22/22/21);"),
+                     paste0("2018-03-30; 21:00; caliper = (brust-li @ 12|13|12, ",
+                            "brust-re @ 12|13|13, bauch-li @ 28|29|29, bauch-re @ 24|21|28, ",
+                            "bein-li @ 14|16|14, bein-re @ 22|22|21);"))
+
+test_that("get_subkey_value_mean() works with different delimiters", {
+  expect_equal(
+    get_subkey_value_mean(
+      get_value_text(dat_delim_calip_01, key = "caliper"), subkey = "brust-li",
+      key_sep = ",", keyvalue_sep = ":", vec_sep = "/"),
+    c(mean(c(14,12,11)), NA, NA, NA, NA)
+  )
+
+  expect_warning(
+    val <- get_subkey_value_mean(
+      get_value_text(dat_delim_calip_01, key = "caliper"), subkey = "brust-li",
+      key_sep = ",", keyvalue_sep = "@", vec_sep = "/"),
+    "NAs introduced by coercion"
+  )
+  expect_equal(val, c(NA, NA, mean(c(12,13,12)), NA, NA))
+
+  expect_warning(
+    val <- get_subkey_value_mean(
+      get_value_text(dat_delim_calip_01, key = "caliper"), subkey = "brust-li",
+      key_sep = "!", keyvalue_sep = "@", vec_sep = "/"),
+    "NAs introduced by coercion"
+  )
+  expect_equal(val, c(NA, NA, NA, mean(c(12,13,12)), NA))
 
 
-## [[here]] [[to do]]
+  expect_warning(
+    val <- get_subkey_value_mean(
+      get_value_text(dat_delim_calip_01, key = "caliper"), subkey = "brust-li",
+      key_sep = ",", keyvalue_sep = "@", vec_sep = "\\|"),
+    "NAs introduced by coercion"
+  )
+  expect_equal(val, c(NA, NA, NA, NA, mean(c(12,13,12)))
+  )
+})
