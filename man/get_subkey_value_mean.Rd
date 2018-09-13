@@ -5,7 +5,7 @@
 \title{Extract (mean) values for sub-keys.}
 \usage{
 get_subkey_value_mean(value, subkey, key_sep = ",", keyvalue_sep = ":",
-  vecsep = "/")
+  vec_sep = "/")
 }
 \arguments{
 \item{value}{The value extracted from the original key-value pair.}
@@ -18,7 +18,7 @@ from each other.}
 \item{keyvalue_sep}{The separator that separates the subkey from the value(s)
 of that subkey.}
 
-\item{vecsep}{The separator that separates the individual values for each
+\item{vec_sep}{The separator that separates the individual values for each
 subkey value.}
 }
 \value{

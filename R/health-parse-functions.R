@@ -321,7 +321,7 @@ get_value_num <- function(dat_txt, key, sep = ";") {
 #'   from each other.
 #' @param keyvalue_sep The separator that separates the subkey from the value(s)
 #'   of that subkey.
-#' @param vecsep The separator that separates the individual values for each
+#' @param vec_sep The separator that separates the individual values for each
 #'   subkey value.
 #'
 #' @return A mean value for all values of the subkey, or \code{NA}.
@@ -344,7 +344,7 @@ get_value_num <- function(dat_txt, key, sep = ";") {
 #'   get_value_text(dat, key = "caliper"),
 #'   subkey = "brust-re")
 get_subkey_value_mean <- function(value, subkey, key_sep = ",",
-                                  keyvalue_sep = ":", vecsep = "/") {
+                                  keyvalue_sep = ":", vec_sep = "/") {
   ## remove parenthesis:
   keyvaluepairs <- stringr::str_replace_all(value, "^\\(|\\)$", "")
   ## split into key-value pairs and trim key-value pair strings:
@@ -359,7 +359,7 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
   value_vec <- purrr::map(value_vec, ~ ifelse(length(.x) == 0, NA, .x))
 
   ## split into individual values, convert to numeric and calulate mean:
-  value_vec_split <- stringr::str_split(value_vec, vecsep)
+  value_vec_split <- stringr::str_split(value_vec, vec_sep)
   value_vec_split <- purrr::map(value_vec_split, ~ ifelse(.x == "NA", NA, .x))
   ret <- purrr::map_dbl(value_vec_split, ~ (mean(as.numeric(.x))))
   return(ret)
@@ -385,22 +385,22 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
 #'
 #' @examples
 calc_bodyfat <- function(value, age, key_sep = ",",
-                        keyvalue_sep = ":", vecsep = "/") {
+                        keyvalue_sep = ":", vec_sep = "/") {
   k0 <- 1.10938
   k1 <- 0.0008267
   k2 <- 0.0000016
   ka <- 0.0002574
   d_brust <- (
-    get_subkey_value_mean(value, subkey = "brust-li", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vecsep = vecsep) +
-      get_subkey_value_mean(value, subkey = "brust-re", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vecsep = vecsep)
+    get_subkey_value_mean(value, subkey = "brust-li", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep) +
+      get_subkey_value_mean(value, subkey = "brust-re", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep)
   ) / 2
   d_bauch <- (
-    get_subkey_value_mean(value, subkey = "bauch-li", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vecsep = vecsep) +
-      get_subkey_value_mean(value, subkey = "bauch-re", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vecsep = vecsep)
+    get_subkey_value_mean(value, subkey = "bauch-li", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep) +
+      get_subkey_value_mean(value, subkey = "bauch-re", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep)
   ) / 2
   d_oberschenkel <- (
-    get_subkey_value_mean(value, subkey = "bein-li", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vecsep = vecsep) +
-      get_subkey_value_mean(value, subkey = "bein-re", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vecsep = vecsep)
+    get_subkey_value_mean(value, subkey = "bein-li", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep) +
+      get_subkey_value_mean(value, subkey = "bein-re", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep)
   ) / 2
   s <- d_brust + d_bauch + d_oberschenkel
   bodyfat <- (( 4.95 / ( k0 - ( k1 * s ) + ( k2 * s^2 ) - ( ka * age ))) - 4.5 ) * 100
