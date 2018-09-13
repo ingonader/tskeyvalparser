@@ -13,13 +13,16 @@ get_subkey_value_mean(value, subkey, key_sep = ",", keyvalue_sep = ":",
 \item{subkey}{The subkey for which the data should be extracted.}
 
 \item{key_sep}{The separator that separates the subkey-value-pairs
-from each other.}
+from each other. Needs to be a valid regular expression (e.g.,
+'|' needs to be escaped as '\|')}
 
 \item{keyvalue_sep}{The separator that separates the subkey from the value(s)
-of that subkey.}
+of that subkey. Needs to be a valid regular expression (e.g.,
+'|' needs to be escaped as '\|')}
 
 \item{vec_sep}{The separator that separates the individual values for each
-subkey value.}
+subkey value. Needs to be a valid regular expression (e.g.,
+'|' needs to be escaped as '\|')}
 }
 \value{
 A mean value for all values of the subkey, or \code{NA}.

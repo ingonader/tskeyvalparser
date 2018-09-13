@@ -318,11 +318,14 @@ get_value_num <- function(dat_txt, key, sep = ";") {
 #' @param value The value extracted from the original key-value pair.
 #' @param subkey The subkey for which the data should be extracted.
 #' @param key_sep The separator that separates the subkey-value-pairs
-#'   from each other.
+#'   from each other. Needs to be a valid regular expression (e.g.,
+#'   '|' needs to be escaped as '\\|')
 #' @param keyvalue_sep The separator that separates the subkey from the value(s)
-#'   of that subkey.
+#'   of that subkey. Needs to be a valid regular expression (e.g.,
+#'   '|' needs to be escaped as '\\|')
 #' @param vec_sep The separator that separates the individual values for each
-#'   subkey value.
+#'   subkey value. Needs to be a valid regular expression (e.g.,
+#'   '|' needs to be escaped as '\\|')
 #'
 #' @return A mean value for all values of the subkey, or \code{NA}.
 #' @export
@@ -351,17 +354,21 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
   value_split <- stringr::str_split(keyvaluepairs, key_sep)
   value_split <- purrr::map(value_split, stringr::str_trim)
 
-  ## split into a list of matrices ["key, "value"]:
+  ## split into a list of matrices ["key, "value"], then trim again:
   key_split <- purrr::map(value_split, ~stringr::str_split_fixed(.x, keyvalue_sep, n = 2))
+  key_split <- purrr::map(key_split, ~ apply(.x, 1:2, stringr::str_trim))
 
   ## extract the value for specified subkey, replacing "character(0)" with NA:
   value_vec <- purrr::map(key_split, ~ .x[which(.x[,1] == subkey), 2])
   value_vec <- purrr::map(value_vec, ~ ifelse(length(.x) == 0, NA, .x))
 
-  ## split into individual values, convert to numeric and calulate mean:
+  ## split into individual values, convert to numeric:
   value_vec_split <- stringr::str_split(value_vec, vec_sep)
   value_vec_split <- purrr::map(value_vec_split, ~ ifelse(.x == "NA", NA, .x))
-  ret <- purrr::map_dbl(value_vec_split, ~ (mean(as.numeric(.x))))
+  value_vec_split_num <- purrr::map(value_vec_split, as.numeric)
+
+  ## calulate mean:
+  ret <- purrr::map_dbl(value_vec_split_num, mean)
   return(ret)
 }
 ## [[to do]]

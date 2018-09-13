@@ -14,13 +14,16 @@ calc_bodyfat(value, age, key_sep = ",", keyvalue_sep = ":",
 (at the time of taking the measurements).}
 
 \item{key_sep}{The separator that separates the subkey-value-pairs
-from each other.}
+from each other. Needs to be a valid regular expression (e.g.,
+'|' needs to be escaped as '\|')}
 
 \item{keyvalue_sep}{The separator that separates the subkey from the value(s)
-of that subkey.}
+of that subkey. Needs to be a valid regular expression (e.g.,
+'|' needs to be escaped as '\|')}
 
 \item{vec_sep}{The separator that separates the individual values for each
-subkey value.}
+subkey value. Needs to be a valid regular expression (e.g.,
+'|' needs to be escaped as '\|')}
 }
 \description{
 Using the 3-Falten-Formel by Jackson & Pollock, for men.
