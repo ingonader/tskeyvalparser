@@ -193,7 +193,7 @@ dat_delim_calip_01 <- c(paste0("2018-03-23; 20:30; caliper = (brust-li: 14/12/11
                             "brust-re @ 12|13|13, bauch-li @ 28|29|29, bauch-re @ 24|21|28, ",
                             "bein-li @ 14|16|14, bein-re @ 22|22|21);"))
 
-test_that("get_subkey_value_mean() works with different delimiters", {
+test_that("get_subkey_value_mean() works with different delimiters (single char)", {
   expect_equal(
     get_subkey_value_mean(
       get_value_text(dat_delim_calip_01, key = "caliper"), subkey = "brust-li",
@@ -227,3 +227,39 @@ test_that("get_subkey_value_mean() works with different delimiters", {
   expect_equal(val, c(NA, NA, NA, NA, mean(c(12,13,12)))
   )
 })
+
+
+dat_delim_calip_tmp <- c(paste0("2018-03-23; 20:30; note = line just to test vectorization"),
+                        paste0("2018-03-23; 20:30; caliper = ",
+                               "(brust-li: 14/12/11, brust-re: 12/13/13, ",
+                               " bauch-li: 25/25/25, bauch-re: 26/26/25, ",
+                               " bein-li:  15/15/15, bein-re:  24/23/26);"))
+
+test_that("get_subkey_value_mean(): key_sep delimiter works (multi char)", {
+  dat_delim_calip_02 <- c(paste0("2018-03-23; 20:30; note = line just to test vectorization"),
+                          paste0("2018-03-23; 20:30; caliper = ",
+                                 "(brust-li: 14/12/11 --- brust-re: 12/13/13 --- ",
+                                 " bauch-li: 25/25/25 --- bauch-re: 26/26/25 --- ",
+                                 " bein-li:  15/15/15 --- bein-re:  24/23/26);"))
+  expect_equal(
+    get_subkey_value_mean(
+      get_value_text(dat_delim_calip_02, key = "caliper"), subkey = "brust-li",
+      key_sep = "---", keyvalue_sep = ":", vec_sep = "/"),
+    c(NA, mean(c(12,13,12)))
+  )
+
+  dat_delim_calip_03 <- c(paste0("2018-03-23; 20:30; note = line just to test vectorization"),
+                           paste0("2018-03-23; 20:30; caliper = ",
+                                  "(brust-li: 14/12/11,, brust-re: 12/13/13,, ",
+                                  " bauch-li: 25/25/25,, bauch-re: 26/26/25,, ",
+                                  " bein-li:  15/15/15,, bein-re:  24/23/26);"))
+  expect_equal(
+    get_subkey_value_mean(
+      get_value_text(dat_delim_calip_03, key = "caliper"), subkey = "brust-li",
+      key_sep = ",,", keyvalue_sep = ":", vec_sep = "/"),
+    c(NA, mean(c(12,13,12)))
+  )
+})
+
+## [[here]] -- make smaller test? single data snippets for each separator?
+
