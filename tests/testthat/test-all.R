@@ -337,19 +337,16 @@ dat_bodyfat_tmp <- c(paste0("2018-03-23; 20:30; note = line just to test vectori
                             " bauch-li: 30/30/30, bauch-re: 30/30/30, ",
                             " bein-li:  20/20/20, bein-re:  20/20/20);"),
                      paste0("2018-03-23; 20:30; caliper = ",
-                            "(brust-li: 10/10/10, brust-re: 10/10/10, ",
-                            " bauch-li: 20/20/20, bauch-re: 20/20/20, ",
-                            " bein-li:  10/10/10, bein-re:  10/10/10);"))
-
+                            "(brust-li: 10/10/10, brust-re: 10/10/10/10/10, ",
+                            " bauch-li: 20/20/20, bauch-re: 20/20, ",
+                            " bein-li:  10/10/10, bein-re:  10);"))
 value_bodyfat_01 <- get_value_text(dat_bodyfat_tmp, key = "caliper", sep = ";")
-
-## checked with: http://www.got-big.de/Blog/koerperfettrechner/
 
 test_that("calc_bodyfat() returns correct bodyfat values", {
   expect_equal(calc_bodyfat(value_bodyfat_01, age = 39, key_sep = ",",
                             keyvalue_sep = ":", vec_sep = "/"),
                c(NA, 18.26393228, 21.73749209, 13.12175499))
 })
+## checked with: http://www.got-big.de/Blog/koerperfettrechner/
 
 
-#test_that("calc_bodyfat() handles missing values correctly", {})
