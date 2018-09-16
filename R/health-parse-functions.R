@@ -370,6 +370,9 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
 
   ## calulate mean:
   ret <- purrr::map_dbl(value_vec_split_num, mean, ...)
+
+  ## convert NaN's to NA's (as mean(c(NA)) returns NaN, which is misleading):
+  ret[is.nan(ret)] <- NA
   return(ret)
 }
 ## [[to do]]
@@ -382,6 +385,8 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
 #'
 #' @param age Age of the person that the caliper measurements were taken of
 #'   (at the time of taking the measurements).
+#' @param ... parameters passed to \code{calc_bodyfat_mean} and in turn to
+#'   \code{mean} function.
 #' @inheritParams get_subkey_value_mean
 #'
 #' @references
@@ -393,22 +398,22 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
 #'
 #' @examples
 calc_bodyfat <- function(value, age, key_sep = ",",
-                        keyvalue_sep = ":", vec_sep = "/") {
+                        keyvalue_sep = ":", vec_sep = "/", ...) {
   k0 <- 1.10938
   k1 <- 0.0008267
   k2 <- 0.0000016
   ka <- 0.0002574
   d_brust <- (
-    get_subkey_value_mean(value, subkey = "brust-li", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep) +
-      get_subkey_value_mean(value, subkey = "brust-re", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep)
+    get_subkey_value_mean(value, subkey = "brust-li", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep, ...) +
+      get_subkey_value_mean(value, subkey = "brust-re", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep, ...)
   ) / 2
   d_bauch <- (
-    get_subkey_value_mean(value, subkey = "bauch-li", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep) +
-      get_subkey_value_mean(value, subkey = "bauch-re", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep)
+    get_subkey_value_mean(value, subkey = "bauch-li", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep, ...) +
+      get_subkey_value_mean(value, subkey = "bauch-re", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep, ...)
   ) / 2
   d_oberschenkel <- (
-    get_subkey_value_mean(value, subkey = "bein-li", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep) +
-      get_subkey_value_mean(value, subkey = "bein-re", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep)
+    get_subkey_value_mean(value, subkey = "bein-li", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep, ...) +
+      get_subkey_value_mean(value, subkey = "bein-re", key_sep = key_sep, keyvalue_sep = keyvalue_sep, vec_sep = vec_sep, ...)
   ) / 2
   s <- d_brust + d_bauch + d_oberschenkel
   bodyfat <- (( 4.95 / ( k0 - ( k1 * s ) + ( k2 * s^2 ) - ( ka * age ))) - 4.5 ) * 100
@@ -423,5 +428,7 @@ calc_bodyfat <- function(value, age, key_sep = ",",
 #             "2018-03-29; 19:00; weight = 90.1kg;", "2018-03-30; 21:00; weight = 89.3kg; note = nach Laufen;",
 #             "2018-03-30; 21:00; caliper = (brust-li: 12/13/12, brust-re: 12/13/13, bauch-li: 28/29/29, bauch-re: 24/21/28, bein-li: 14/16/14, bein-re: 22/22/21);")
 #calc_bodyfat(get_value_text(dat, key = "caliper"), age = 39)
-
+#
+#value <- get_value_text(dat_bodyfat_tmp, key = "caliper", sep = ";")
+#age <- 39
 

@@ -5,7 +5,7 @@
 \title{Calculate body fat from caliper measurements.}
 \usage{
 calc_bodyfat(value, age, key_sep = ",", keyvalue_sep = ":",
-  vec_sep = "/")
+  vec_sep = "/", ...)
 }
 \arguments{
 \item{value}{The value extracted from the original key-value pair.}
@@ -24,6 +24,9 @@ of that subkey. Needs to be a valid regular expression (e.g.,
 \item{vec_sep}{The separator that separates the individual values for each
 subkey value. Needs to be a valid regular expression (e.g.,
 '|' needs to be escaped as '\|')}
+
+\item{...}{parameters passed to \code{calc_bodyfat_mean} and in turn to
+\code{mean} function.}
 }
 \description{
 Using the 3-Falten-Formel by Jackson & Pollock, for men.
