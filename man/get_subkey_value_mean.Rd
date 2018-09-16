@@ -5,7 +5,7 @@
 \title{Extract (mean) values for sub-keys.}
 \usage{
 get_subkey_value_mean(value, subkey, key_sep = ",", keyvalue_sep = ":",
-  vec_sep = "/")
+  vec_sep = "/", ...)
 }
 \arguments{
 \item{value}{The value extracted from the original key-value pair.}
@@ -23,6 +23,8 @@ of that subkey. Needs to be a valid regular expression (e.g.,
 \item{vec_sep}{The separator that separates the individual values for each
 subkey value. Needs to be a valid regular expression (e.g.,
 '|' needs to be escaped as '\|')}
+
+\item{...}{parameters passed to \code{mean} function.}
 }
 \value{
 A mean value for all values of the subkey, or \code{NA}.

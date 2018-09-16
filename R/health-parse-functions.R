@@ -326,6 +326,7 @@ get_value_num <- function(dat_txt, key, sep = ";") {
 #' @param vec_sep The separator that separates the individual values for each
 #'   subkey value. Needs to be a valid regular expression (e.g.,
 #'   '|' needs to be escaped as '\\|')
+#' @param ... parameters passed to \code{mean} function.
 #'
 #' @return A mean value for all values of the subkey, or \code{NA}.
 #' @export
@@ -347,7 +348,7 @@ get_value_num <- function(dat_txt, key, sep = ";") {
 #'   get_value_text(dat, key = "caliper"),
 #'   subkey = "brust-re")
 get_subkey_value_mean <- function(value, subkey, key_sep = ",",
-                                  keyvalue_sep = ":", vec_sep = "/") {
+                                  keyvalue_sep = ":", vec_sep = "/", ...) {
   ## remove parenthesis:
   keyvaluepairs <- stringr::str_replace_all(value, "^\\(|\\)$", "")
   ## split into key-value pairs and trim key-value pair strings:
@@ -368,7 +369,7 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
   value_vec_split_num <- purrr::map(value_vec_split, as.numeric)
 
   ## calulate mean:
-  ret <- purrr::map_dbl(value_vec_split_num, mean)
+  ret <- purrr::map_dbl(value_vec_split_num, mean, ...)
   return(ret)
 }
 ## [[to do]]
