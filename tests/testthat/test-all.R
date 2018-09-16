@@ -384,3 +384,39 @@ test_that("calc_bodyfat() returns correct bodyfat values", {
 ## checked with: http://www.got-big.de/Blog/koerperfettrechner/
 
 
+
+dat_bodyfat_tmp <- c(paste0("2018-03-23; 20:30; note = line just to test vectorization"),
+                     paste0("2018-03-23; 20:30; caliper = ",
+                            "(brust-li: 14/12/11, brust-re: 12/13/one-missing, ",
+                            " bauch-li: 25/25/25, bauch-re: 26/26/25, ",
+                            " bein-li:  15/15/15, bein-re:  24/23/26);"),
+                     paste0("2018-03-23; 20:30; caliper = ",
+                            "(brust-li: 20/20/20, brust-re: 20/two/missing, ",
+                            " bauch-li: 30/30/30, bauch-re: 30/30/30, ",
+                            " bein-li:  20/20/20, bein-re:  20/20/20);"),
+                     paste0("2018-03-23; 20:30; caliper = ",
+                            "(brust-li: 20/two/and, brust-re: 20/two/missing, ",
+                            " bauch-li: 30/30/30, bauch-re: 30/30/30, ",
+                            " bein-li:  20/20/20, bein-re:  20/20/20);"),
+                     paste0("2018-03-23; 20:30; caliper = ",
+                            "(brust-li: all-missing, brust-re: all-missing, ",
+                            " bauch-li: 20/20/20, bauch-re: 20/20/20, ",
+                            " bein-li:  10/10/10, bein-re:  10/10/10);"))
+value_bodyfat_02 <- get_value_text(dat_bodyfat_tmp, key = "caliper", sep = ";")
+
+test_that("calc_bodyfat() handles missing values correctly", {
+  expect_warning(
+    val <- calc_bodyfat(value_bodyfat_02, age = 39, key_sep = ",",
+                 keyvalue_sep = ":", vec_sep = "/", na.rm = TRUE),
+    "NAs introduced by coercion")
+  expect_equal(val, c(NA, 18.24020372, 21.73749209, 21.73749209, NA))
+
+  expect_warning(
+    val <- calc_bodyfat(value_bodyfat_02, age = 39, key_sep = ",",
+                 keyvalue_sep = ":", vec_sep = "/", na.rm = FALSE),
+    "NAs introduced by coercion")
+  expect_equal(val, as.double(c(NA, NA, NA, NA, NA)))
+})
+
+
+
