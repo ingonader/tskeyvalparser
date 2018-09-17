@@ -375,8 +375,6 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
   ret[is.nan(ret)] <- NA
   return(ret)
 }
-## [[to do]]
-## * unit tests starting from here for the remaining functions
 
 
 #' Calculate body fat from caliper measurements.
@@ -418,17 +416,5 @@ calc_bodyfat <- function(value, age, key_sep = ",",
   s <- d_brust + d_bauch + d_oberschenkel
   bodyfat <- (( 4.95 / ( k0 - ( k1 * s ) + ( k2 * s^2 ) - ( ka * age ))) - 4.5 ) * 100
   return(bodyfat)
-
-  ## [[?]] also return a value if there is only one measurement (li or re)?
 }
-## [[to do]]
-## * get rid of warnings!
-## * add documentation
-#dat <- c("2018-03-23; 20:30; caliper = (brust-li: 14/12/11, brust-re: 12/13/13, bauch-li: 25/25/25, bauch-re: 26/26/25, bein-li: 15/15/15, bein-re: 24/23/26);",
-#             "2018-03-29; 19:00; weight = 90.1kg;", "2018-03-30; 21:00; weight = 89.3kg; note = nach Laufen;",
-#             "2018-03-30; 21:00; caliper = (brust-li: 12/13/12, brust-re: 12/13/13, bauch-li: 28/29/29, bauch-re: 24/21/28, bein-li: 14/16/14, bein-re: 22/22/21);")
-#calc_bodyfat(get_value_text(dat, key = "caliper"), age = 39)
-#
-#value <- get_value_text(dat_bodyfat_tmp, key = "caliper", sep = ";")
-#age <- 39
 
