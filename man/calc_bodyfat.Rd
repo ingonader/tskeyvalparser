@@ -28,8 +28,32 @@ subkey value. Needs to be a valid regular expression (e.g.,
 \item{...}{parameters passed to \code{calc_bodyfat_mean} and in turn to
 \code{mean} function.}
 }
+\value{
+Body fat percentage between 0 and 100 percent, or NA.
+}
 \description{
 Using the 3-Falten-Formel by Jackson & Pollock, for men.
+}
+\examples{
+dat_bodyfat_tmp <- c(paste0("2018-03-23; 20:30; note = line just to test vectorization"),
+                     paste0("2018-03-23; 20:30; caliper = ",
+                            "(brust-li: 14/12/11, brust-re: 12/13/one-missing, ",
+                            " bauch-li: 25/25/25, bauch-re: 26/26/25, ",
+                            " bein-li:  15/15/15, bein-re:  24/23/26);"),
+                     paste0("2018-03-23; 20:30; caliper = ",
+                            "(brust-li: 20/20/20, brust-re: 20/two/missing, ",
+                            " bauch-li: 30/30/30, bauch-re: 30/30/30, ",
+                            " bein-li:  20/20/20, bein-re:  20/20/20);"),
+                     paste0("2018-03-23; 20:30; caliper = ",
+                            "(brust-li: 20/two/and, brust-re: 20/two/missing, ",
+                            " bauch-li: 30/30/30, bauch-re: 30/30/30, ",
+                            " bein-li:  20/20/20, bein-re:  20/20/20);"),
+                     paste0("2018-03-23; 20:30; caliper = ",
+                            "(brust-li: all-missing, brust-re: all-missing, ",
+                            " bauch-li: 20/20/20, bauch-re: 20/20/20, ",
+                            " bein-li:  10/10/10, bein-re:  10/10/10);"))
+calc_bodyfat(get_value_text(dat_bodyfat_tmp, key = "caliper"), age = 39, na.rm = TRUE)
+
 }
 \references{
 \url{https://de.wikipedia.org/wiki/Calipometrie}

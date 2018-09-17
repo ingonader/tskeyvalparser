@@ -391,10 +391,28 @@ get_subkey_value_mean <- function(value, subkey, key_sep = ",",
 #' \url{https://de.wikipedia.org/wiki/Calipometrie}
 #' \url{Jackson, Pollock: Generalized equations for predicting body density of women. In: British Journal of Nutrition. Nr.40, Oktober 1978, S.497–504 (englisch)}
 #'
-#' @return
-#' @export
-#'
+#' @return Body fat percentage between 0 and 100 percent, or NA.
 #' @examples
+#' dat_bodyfat_tmp <- c(paste0("2018-03-23; 20:30; note = line just to test vectorization"),
+#'                      paste0("2018-03-23; 20:30; caliper = ",
+#'                             "(brust-li: 14/12/11, brust-re: 12/13/one-missing, ",
+#'                             " bauch-li: 25/25/25, bauch-re: 26/26/25, ",
+#'                             " bein-li:  15/15/15, bein-re:  24/23/26);"),
+#'                      paste0("2018-03-23; 20:30; caliper = ",
+#'                             "(brust-li: 20/20/20, brust-re: 20/two/missing, ",
+#'                             " bauch-li: 30/30/30, bauch-re: 30/30/30, ",
+#'                             " bein-li:  20/20/20, bein-re:  20/20/20);"),
+#'                      paste0("2018-03-23; 20:30; caliper = ",
+#'                             "(brust-li: 20/two/and, brust-re: 20/two/missing, ",
+#'                             " bauch-li: 30/30/30, bauch-re: 30/30/30, ",
+#'                             " bein-li:  20/20/20, bein-re:  20/20/20);"),
+#'                      paste0("2018-03-23; 20:30; caliper = ",
+#'                             "(brust-li: all-missing, brust-re: all-missing, ",
+#'                             " bauch-li: 20/20/20, bauch-re: 20/20/20, ",
+#'                             " bein-li:  10/10/10, bein-re:  10/10/10);"))
+#' calc_bodyfat(get_value_text(dat_bodyfat_tmp, key = "caliper"), age = 39, na.rm = TRUE)
+#'
+#' @export
 calc_bodyfat <- function(value, age, key_sep = ",",
                         keyvalue_sep = ":", vec_sep = "/", ...) {
   k0 <- 1.10938
