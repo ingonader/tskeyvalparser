@@ -2,7 +2,6 @@
 
 export(calc_bodyfat)
 export(get_data_long)
-export(get_paths)
 export(get_subkey_value_mean)
 export(get_timestamp)
 export(get_value_num)
